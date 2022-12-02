@@ -11,15 +11,17 @@ class FirebaseUtils {
 
       User user = User(email: email, name: name, phoneNo: phoneNo, password: password);
 
-      String? errorMessage = await createNewUser(user);
+      dynamic errorMessage = await saveUserDetails(user);
 
-      if (errorMessage == null) {
-        print(errorMessage);
-        return user;
-      } else {
-        print('Failed');
-        return 'Couldn\' sign up user';
-      }
+      print(errorMessage);
+
+      // if (errorMessage == null) {
+      //   print(errorMessage);
+      //   return user;
+      // } else {
+      //   print('Failed');
+      //   return 'Couldn\' sign up user';
+      // }
 
     } catch (e) {
       return e;
@@ -30,6 +32,14 @@ class FirebaseUtils {
       .collection('users')
       .add(user.toJson())
       .then((value) => null, onError: (e) => e);
+  
+  static Future saveUserDetails(User user) async {
+    await firestore
+        .collection('users')
+        .add(user.toJson())
+        .then((value) => print('User added'))
+        .catchError((err) => print('Failed to add user'));
+  }
 
   static Future<dynamic> loginWithEmailAndPassword(String email, String password) async {
 
