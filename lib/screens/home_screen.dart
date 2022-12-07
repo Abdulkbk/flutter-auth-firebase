@@ -1,4 +1,5 @@
 import 'package:auth_firebase/services/authentication.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,13 +10,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String? email;
+  String? name;
+
+  Map userData = {};
   void signOut() async {
     await FirebaseUtils.logOut();
   }
 
+  void getUser() async {
+    dynamic user = FirebaseAuth.instance.currentUser;
+    String userID = user.uid;
+    dynamic userData = await FirebaseUtils.getUserInfo(userID);
+    setState(() {
+      email = userData.email;
+      name = userData.name;
+    });
+    print(userData);
+  }
+
+
   @override
   void initState() {
     super.initState();
+    getUser();
   }
 
   @override
@@ -27,6 +45,21 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text('Name: $name',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Text('Email $email',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          const SizedBox(height: 20.0,),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: SizedBox(

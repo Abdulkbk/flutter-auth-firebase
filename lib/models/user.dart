@@ -3,19 +3,22 @@ class User {
   String name;
   String password;
   String phoneNo;
+  String userID;
 
   User(
       {required this.email,
       required this.name,
       required this.phoneNo,
-      required this.password});
+      required this.password,
+      this.userID = ''});
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
         email: parsedJson['email'] ?? '',
         name: parsedJson['name'] ?? '',
         phoneNo: parsedJson['phoneNo'] ?? '',
-        password: parsedJson['password'] ?? '');
+        password: parsedJson['password'] ?? '',
+        userID: parsedJson['id'] ?? parsedJson['userID'] ?? '');
   }
 
   Map<String, dynamic> toJson() {
@@ -23,7 +26,8 @@ class User {
       'email': email,
       'name': name,
       'password': password,
-      'phoneNo': phoneNo
+      'phoneNo': phoneNo,
+      'id': userID,
     };
   }
 }
